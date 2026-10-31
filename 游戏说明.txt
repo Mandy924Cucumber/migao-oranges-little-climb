@@ -1,0 +1,61 @@
+橘子的向上旅行 / Orange’s Little Climb
+
+运行
+双击「开始游戏.command」。或者用 Godot 4.3+ 打开 project.godot，按 F5。
+已在这台电脑的 Godot 4.7.2 上运行和验证。兼容渲染器，不需要额外插件或联网。
+
+操作
+A / D 或左右方向键：移动
+空格：跳跃；空中松开后再按一次：二段跳。长按可跳得更高。
+Esc：暂停 / 继续
+R：回到最近的检查站（激活检查站后可用）
+M：开启 / 关闭声音
+F11：全屏 / 窗口
+Enter：在首页开始或继续；在结束页重开
+
+玩法
+正视图的垂直家居跑酷。共有 144 件物品、15 类原创家具、6 段不同色调的房间。
+所有物品从下方可以穿过，从上方落下才能站稳。物品顶部的宽度决定落脚难度。
+台灯、闹钟、杯子比较窄；凳子、书堆、长凳更宽；床落地后自动弹跳，并保留一次空中跳跃。
+右上角「物品图鉴」统计第一次登上的物品，同一物品重复落地不重复计数。
+每经过 24 件物品，会出现一个独立的砖块检查站。检查站不占 144 件物品的计数。
+检查站位于第 24、48、72、96、120 件物品之后，旗帜变绿表示激活。
+抵达第 144 件物品后的终点砖台，即可到达云端花园并完成旅行。
+
+掉落和存档
+在激活第一个检查站之前，离开起点后落回最底板会结束本次游戏。
+激活检查站之后，如果从最近到达的高度跌落超过一屏的安全距离，会自动回到最近的检查站。
+直接落到最底板仍然判定为游戏结束。
+失足重生保留本轮已点亮的物品数。
+检查站会自动保存到本机；关闭后再次打开，可以点击「继续上次的旅行」。
+暂停菜单返回首页或关闭游戏时，也会保存当前检查站与本轮计数。
+「开始旅行」与「重新开始」会开启全新的一轮并覆盖旧的检查站记录。
+切换到别的窗口时会自动暂停。
+
+项目结构
+scenes/main.tscn：入口场景
+scripts/game.gd：关卡、镜头、收集、重生与本地存档
+scripts/player.gd：角色绘制、移动、二段跳、跳跃缓冲和离台宽容时间
+scripts/platform.gd：单向碰撞、家具、检查站
+scripts/backdrop.gd：纸感背景、拱窗、植物、六段房间配色
+scripts/hud.gd：首页、右上角物品图鉴、暂停与结束画面
+scripts/sound.gd：原创程序音效
+assets/objects/：15 类可编辑 SVG 家具插画
+assets/fonts/：Noto Sans SC（SIL OFL，许可证随附）
+assets/roomtone.wav：原创生成的循环背景音乐
+previews/：实际 Godot 渲染截图
+
+自定义
+在 scripts/game.gd 的 ITEM_ORDER 修改物品顺序，PATH_X 修改横向路线。
+在 _build_level() 调整物品数量、每段数量和上升高度。
+在 scripts/player.gd 调整 SPEED、GRAVITY、JUMP_SPEED、DOUBLE_SPEED。
+SVG 和程序绘制都可在本地直接编辑；角色依据提供的橙色扁圆身体、两只黑眼睛和两只小脚制作。
+
+验证
+Godot --headless --path . --fixed-fps 120 --script tests/gameplay_test.gd
+Godot --headless --path . --script tests/save_test.gd
+测试使用真实角色物理及合成键盘输入，逐一到达全部物品和检查站，验证跳跃、计数、弹床、失败、重生、暂停与存档恢复。
+
+参考
+Godot CharacterBody2D 官方文档：
+https://docs.godotengine.org/en/stable/classes/class_characterbody2d.html
